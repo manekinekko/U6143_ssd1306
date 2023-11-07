@@ -63,6 +63,26 @@ sudo python3 ssd1306_stats.py
 - Open the U6143_ssd1306/C/ssd1306_i2c.h file. You can modify the value of the IP_SWITCH variable to determine whether to display the IP address or custom information. (The custom IP address is displayed by default)
 ![EasyBehavior](https://github.com/UCTRONICS/pic/blob/master/OLED/custom_display.jpg)
 
+## Cluster setup script (WIP):
+
+```
+ssh hostname "sudo locale-gen --purge en_US.UTF-8"
+ssh hostname "echo -e 'LANG=\"en_US.UTF-8"\nLANGUAGE="en_US:en\"\n' > /etc/default/locale"
+ssh hostname "sudo apt-get update && sudo apt-get install raspi-config build-essential i2c-tools libi2c-dev -y"
+ssh hostname "git clone https://github.com/manekinekko/U6143_ssd1306.git && cd U6143_ssd1306/C && sudo make clean && sudo make"
+ssh hostname "sudo touch /etc/rc.local && echo 'sudo /home/wassim/U6143_ssd1306/C/display &' >> /etc/rc.local"
+ssh hostname "sudo chmod +x /etc/rc.local && sudo systemctl enable rc-local.service && sudo systemctl start  rc-local.service"
+
+#!/bin/sh
+
+sudo /home/wassim/U6143_ssd1306/C/display &
+
+exit 0
+
+```
+
+
+
 
 
 
